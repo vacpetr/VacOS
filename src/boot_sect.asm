@@ -12,7 +12,7 @@ jmp $
 %include "boot_sect_print.asm"
 
 TEST:
-    db 'test OS', 0
+    db 'test OSS', 0
 
 ; Fill with 510 zeros minus the size of the previous code
 times 510-($-$$) db 0
