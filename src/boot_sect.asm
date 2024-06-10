@@ -11,7 +11,7 @@ call print
 
 jmp $
 
-%include "boot_sect_print.asm"
+%include "src/boot_sect_print.asm"
 
 TEST:
     db 'test OS', 0
