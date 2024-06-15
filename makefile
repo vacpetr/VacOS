@@ -1,7 +1,36 @@
-compile:
-	nasm -f bin src/boot_sect.asm -o src/boot_sect.bin
+C_SOURCES = $(wildcard src/kernel/*.c src/drivers/*.c)
+HEADERS = $(wildcard src/kernel/*.h src/drivers/*.h)
+# Nice syntax for file extension replacement
+OBJ = ${C_SOURCES:.c=.o}
 
-	dd if=/dev/zero of=boot.iso bs=512 count=100
-	dd if=src/boot_sect.bin of=boot.iso conv=notrunc bs=512 seek=0 count=1
+# Change this if your cross-compiler is somewhere else
+CC=i686-elf-gcc
 
-	qemu-system-x86_64 -drive file=boot.iso,format=raw,index=0
+# -g: Use debugging symbols in gcc
+CFLAGS = -g
+
+all: kernel.bin iso clean
+
+# '--oformat binary' deletes all symbols as a collateral, so we don't need
+# to 'strip' them manually on this case
+kernel.bin: src/boot/kernel_entry.o ${OBJ}
+	i686-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
+	nasm -f bin src/boot/boot_sect.asm -o boot_sect.bin
+
+# To make an object, always compile from its .c
+%.o: %.c ${HEADERS}
+	${CC} ${CFLAGS} -ffreestanding -c $< -o $@
+
+%.o: %.asm
+	nasm $< -f elf -o $@
+
+%.bin: %.asm
+	nasm $< -f bin -o $@
+
+iso:
+	dd if=/dev/zero of=boot.iso bs=512 count=2880
+	dd if=boot_sect.bin of=boot.iso conv=notrunc bs=512 seek=0 count=1
+	dd if=kernel.bin of=boot.iso conv=notrunc bs=512 seek=1 count=2048
+
+clean:
+	rm -rf src/kernel/*.o src/boot/*.bin src/drivers/*.o src/boot/*.o
