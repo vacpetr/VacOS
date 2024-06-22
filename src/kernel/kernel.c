@@ -1,28 +1,10 @@
-void dummy_test_entrypoint() {
-}
+#include "../drivers/screen.h"
+#include "../drivers/text.h"
+#include "../cpu/isr.h"
+#include "../cpu/idt.h"
 
 void main(){
-    unsigned char* videoMem = (unsigned char*) 0xFD000000;
-    int counter = 0;
+    isr_install();
 
-    for(int r = 0; r < 255; r+=3){
-
-        for(int g = 0; g < 255; g+=3){
-
-            for(int b = 0; b < 255; b+=3){
-
-                videoMem[counter] = b;
-                videoMem[counter+1] = r;
-                videoMem[counter+2] = g;
-
-                counter+=3;
-
-                if(counter > 2000000)break;
-            }
-
-             if(counter > 2000000)break;
-        }
-
-         if(counter > 2000000)break;
-    }
+    
 }

@@ -1,7 +1,7 @@
-C_SOURCES = $(wildcard src/kernel/*.c src/drivers/*.c)
-HEADERS = $(wildcard src/kernel/*.h src/drivers/*.h)
+C_SOURCES = $(wildcard src/kernel/*.c src/drivers/*.c src/cpu/*.c)
+HEADERS = $(wildcard src/kernel/*.h src/drivers/*.h src/cpu/*.h)
 # Nice syntax for file extension replacement
-OBJ = ${C_SOURCES:.c=.o}
+OBJ = ${C_SOURCES:.c=.o src/cpu/interrupt.o}
 
 # Change this if your cross-compiler is somewhere else
 CC=i686-elf-gcc
@@ -19,7 +19,7 @@ kernel.bin: src/boot/kernel_entry.o ${OBJ}
 
 # To make an object, always compile from its .c
 %.o: %.c ${HEADERS}
-	${CC} ${CFLAGS} -ffreestanding -c $< -o $@
+	${CC} ${CFLAGS} -Wall -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf -o $@
@@ -33,4 +33,4 @@ iso:
 	dd if=kernel.bin of=boot.iso conv=notrunc bs=512 seek=1 count=2048
 
 clean:
-	rm -rf src/kernel/*.o src/boot/*.bin src/drivers/*.o src/boot/*.o
+	rm -rf src/kernel/*.o src/cpu/*.o src/boot/*.bin src/drivers/*.o src/boot/*.o
