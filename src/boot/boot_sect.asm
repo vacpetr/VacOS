@@ -5,7 +5,7 @@ mov bp, 0x8000 ; set the stack safely away from us
 mov sp, bp
 
 mov bx, KERNEL_OFFSET ; memory where disk segments are loaded
-mov dh, 10 ;number of segments to load
+mov dh, 4 ;number of segments to load
 
 call disk_load ;load sectors from disk
 

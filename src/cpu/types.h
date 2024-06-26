@@ -8,6 +8,11 @@ typedef          short s16;
 typedef unsigned char  u8;
 typedef          char  s8;
 
+typedef u8 bool;
+
+#define true 1
+#define false 0
+
 #define PACKED __attribute__((packed))
 
 #define low_16(address) (u16)((address) & 0xFFFF)

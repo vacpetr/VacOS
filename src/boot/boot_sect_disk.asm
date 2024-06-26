@@ -1,4 +1,4 @@
-;dh - number of sectors to load
+;dh - number of tracks to load
 ;bx - memory addres to load in 
 
 disk_load:
@@ -6,21 +6,29 @@ disk_load:
     push dx
 
     mov ah, 0x02
-    mov al, dh
+    mov al, 18
     mov cl, 0x02
+
     mov ch, 0x00
     mov dh, 0x00
 
+
+
+.disk_loop:
     int 0x13
     jc disk_error
 
+    mov cl,1
+    inc ch
+
+    cmp ch, dh
+    jne .disk_loop
+
+.done:
     pop dx
-    cmp al,dh
-    jne sectors_error
 
     popa
     ret
-
 
 
 sectors_error:
