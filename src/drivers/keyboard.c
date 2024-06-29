@@ -2,9 +2,9 @@
 #include "ports.h"
 #include "../cpu/isr.h"
 #include "text.h"
-#include "util.h"
+#include "../libc/util.h"
 
-bool keyboard_keys[NUM_OF_KEYS];
+u8 keyboard_keys[NUM_OF_KEYS];
 
 static void keyboard_callback(registers_t regs){
     u8 scancode = port_byte_in(KEYBOARD_PORT);

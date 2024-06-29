@@ -1,24 +1,28 @@
 #include "screen.h"
 #include "text.h"
-#include "util.h"
+#include "../libc/memory.h"
 
-//unsigned char sBuffer[SCREEN_SIZE];
+u8* sBuffer;
 
 void put_pixel(int x, int y, color c){
-    VIDEO_MEM[(y*SCREEN_WIDTH+x)*3] = c.b; 
-    VIDEO_MEM[(y*SCREEN_WIDTH+x)*3+1] = c.g; 
-    VIDEO_MEM[(y*SCREEN_WIDTH+x)*3+2] = c.r; 
+    sBuffer[(y*SCREEN_WIDTH+x)*3] = c.b; 
+    sBuffer[(y*SCREEN_WIDTH+x)*3+1] = c.g; 
+    sBuffer[(y*SCREEN_WIDTH+x)*3+2] = c.r; 
 }
 
 void screen_swap(){
 
-    /*for(int i = 1; i < 1024*768; i++){
-        sBuffer[i] = 0;
-    }*/
+    memcpy(VIDEO_MEM, sBuffer, SCREEN_SIZE);
     
 }
 
-
 void clear_screen(){
+    memset(sBuffer, 0, SCREEN_SIZE);
+}
+
+void init_screen(){
+    sBuffer = (u8*)kmalloc(SCREEN_SIZE, sBuffer);
+
+    memset((void*)sBuffer, 0, SCREEN_SIZE);
     memset(VIDEO_MEM, 0, SCREEN_SIZE);
 }

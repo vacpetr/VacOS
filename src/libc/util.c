@@ -1,23 +1,5 @@
 #include "util.h"
 
-void memset(void *dst, u8 value, u32 size){
-    u8 *d = dst;
-
-    while (size-- > 0) {
-        *d++ = value;
-    }
-}
-
-void memcpy(void *dst, void *src, u32 size){
-    u8* d = dst;
-    u8* s = src;
-
-    while(size-- > 0){
-        *d++ = *s++;
-    }
-    
-}
-
 void int_to_string(u32 val, char* str){
     int index = 0;
 

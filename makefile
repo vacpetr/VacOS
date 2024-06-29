@@ -1,5 +1,5 @@
-C_SOURCES = $(wildcard src/kernel/*.c src/drivers/*.c src/cpu/*.c)
-HEADERS = $(wildcard src/kernel/*.h src/drivers/*.h src/cpu/*.h)
+C_SOURCES = $(wildcard src/kernel/*.c src/drivers/*.c src/cpu/*.c src/libc/*.c)
+HEADERS = $(wildcard src/kernel/*.h src/drivers/*.h src/cpu/*.h src/libc/*.h)
 # Nice syntax for file extension replacement
 OBJ = ${C_SOURCES:.c=.o src/cpu/interrupt.o}
 
@@ -33,4 +33,4 @@ iso:
 	dd if=kernel.bin of=boot.iso conv=notrunc bs=512 seek=1 count=2048
 
 clean:
-	rm -rf src/kernel/*.o src/cpu/*.o src/boot/*.bin src/drivers/*.o src/boot/*.o
+	rm -rf src/kernel/*.o src/cpu/*.o src/boot/*.bin src/drivers/*.o src/boot/*.o src/libc/*.o

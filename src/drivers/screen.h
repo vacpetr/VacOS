@@ -2,7 +2,7 @@
 #define SCREEN_H
 
 #include "../cpu/types.h"
-#include "util.h"
+#include "../libc/util.h"
 
 #define VIDEO_MEM ((u8*)0xFD000000)
 
@@ -17,8 +17,11 @@ typedef struct{
     u8 b;
 }color;
 
+extern u8* sBuffer;
+
 void put_pixel(int x, int y, color c);
 void clear_screen();
 void screen_swap();
+void init_screen();
 
 #endif

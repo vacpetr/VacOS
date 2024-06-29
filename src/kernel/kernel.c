@@ -6,17 +6,17 @@
 #include "../drivers/keyboard.h"
 
 void update();
+void draw_vert_line(int x, int y0, int y1, color color);
 
 int x = 0, y = 0;
 
-void main(){
+void kernel_main(){
     isr_install();
 
-    //x = 5/0;
-
     asm volatile("sti");
-    init_timer(20);
+    init_timer(100);
     init_keyboard();
+    init_screen();
 
     int last_tick = timer.tick;
 
@@ -34,20 +34,21 @@ void update(){
     clear_screen();
     color color = {255,0,0};
 
-    for(int xx = 0; xx < 100; xx++){
-        for(int yy = 0; yy < 100; yy++){
-            put_pixel(x+xx, y+yy, color);
-        }
-    }   
+    draw_vert_line(0, 0, SCREEN_HEIGHT, color);
 
-    if(keyboard_keys[KEY_D])x+=5;
-    if(keyboard_keys[KEY_A])x-=5;
-    if(keyboard_keys[KEY_W])y-=5;
-    if(keyboard_keys[KEY_S])y+=5;
+
+    screen_swap();
+
+    if(keyboard_keys[KEY_D])x+=10;
+    if(keyboard_keys[KEY_A])x-=10;
+    if(keyboard_keys[KEY_W])y-=10;
+    if(keyboard_keys[KEY_S])y+=10;
 
     if(x > SCREEN_WIDTH)x = 0;
+}
 
-
-
-
+void draw_vert_line(int x, int y0, int y1, color color){
+    while(y0 <= y1){
+        put_pixel(x, y0++, color);
+    }
 }
